@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        #cropContainerEyecandy {
+            width: 100%;
+            height: 200px;
+            position: relative;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+<div style="width: 300px;height: 300px">
+    <form id="uploadform">
+        <input type="file" id="image" name="icon">
+    </form>
+</div>
+
+<script src="js/jquery-1.8.3.min.js"></script>
+<!--<script src="js/jquery.imgareaselect.min.js"></script>-->
+<script>
+
+
+    $(function(){
+
+        $('#image').change(function(){
+            var formData = new FormData();
+            var fileObj = document.getElementById("image").files[0];// 获取文件对象
+            formData.append("img", fileObj);
+            console.log('---------',formData);
+            $.ajax({
+                url: '/uploadImg',
+                data: formData,
+                type: 'POST',
+                contentType:false,
+                /**
+                 * 必须false才会避开jQuery对 formdata 的默认处理
+                 * XMLHttpRequest会对 formdata 进行正确的处理
+                 */
+                processData:false
+            }).always(function(data){
+                        var response = data;
+                        if(response.status=='success'){
+
+                            $('#uploadform').append('<img src="'+response.url+'">');
+
+                        }
+                    });
+
+         });
+
+    });
+
+
+
+
+</script>
+</body>
+</html>
